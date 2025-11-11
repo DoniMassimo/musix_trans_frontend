@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'api.dart' as api;
 
 Map<String, dynamic> getLyrics() {
   Box box = Hive.box('lyrics');
@@ -52,6 +54,8 @@ Future<void> testHive() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: 'secrets.env');
+  await api.getTracksIds();
   await Hive.initFlutter();
   await Hive.openBox('lyrics');
   runApp(const MyApp());
