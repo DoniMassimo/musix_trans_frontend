@@ -11,3 +11,11 @@ Future<List<String>> getTracksIds() async {
   var rawData = jsonDecode(res.body);
   return List<String>.from(rawData);
 }
+
+Future<Map> getTrackData(String trackId) async {
+  var url = Uri.http(baseUri, '/get_track_data/$trackId');
+  var h = {'x-api-key': dotenv.env['API_KEY'] ?? ''};
+  http.Response res = await http.get(url, headers: h);
+  var rawData = jsonDecode(res.body);
+  return Map.from(rawData);
+}
