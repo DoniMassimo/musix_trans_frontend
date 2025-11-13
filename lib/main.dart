@@ -4,53 +4,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'api.dart' as api;
-
-Map<String, dynamic> getLyrics() {
-  Box box = Hive.box('lyrics');
-  return Map<String, dynamic>.from(box.get("71rgyPxQt2eaIvxvfsZ3B4"));
-}
-
-List<Widget> getLyiricsWidgets() {
-  List<Map<String, dynamic>> rawLines = (getLyrics()['lines'] as List)
-      .map((line) => Map<String, dynamic>.from(line))
-      .toList();
-  List<Map<String, String?>> lyrics = rawLines
-      .map(
-        (line) => {
-          'original': line['words'] as String?,
-          'translation': line['translation'] as String?,
-          'comment': line['comment'] as String?,
-        },
-      )
-      .toList();
-  List<Widget> listWidgets = [];
-  for (var line in lyrics) {
-    listWidgets.add(
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue, width: 2),
-          borderRadius: BorderRadius.circular(
-            8,
-          ), // opzionale: angoli arrotondati
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(line['original'] ?? ''),
-            Text(line['translation'] ?? ''),
-          ],
-        ),
-      ),
-    );
-  }
-  return listWidgets;
-}
-
-Future<void> testHive() async {
-  Box box = Hive.box('lyrics');
-  final String response = await rootBundle.loadString('assets/spoty_text.json');
-  final data = jsonDecode(response);
-  box.put("71rgyPxQt2eaIvxvfsZ3B4", data);
-}
+import 'widgets/side_bar.dart' as side_bar;
+import 'pages/lyric/main.dart' as lyric;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,40 +47,12 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {
-                Navigator.pop(context); // chiude il drawer
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.pop(context);
-                // Naviga verso una nuova schermata
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: side_bar.sideBar(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: getLyiricsWidgets(),
+            children: lyric.getLyiricsWidgets(),
           ),
         ),
       ),
