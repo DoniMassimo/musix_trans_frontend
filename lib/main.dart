@@ -5,13 +5,15 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'api.dart' as api;
 import 'widgets/side_bar.dart' as side_bar;
-import 'pages/lyric/main.dart' as lyric;
+import 'pages/lyric/lyric_page.dart' as lyric;
+import 'package:musix_trans/db.dart' as db;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'secrets.env');
   await Hive.initFlutter();
   await Hive.openBox('lyrics');
+
   runApp(const MyApp());
 }
 
@@ -47,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      drawer: side_bar.sideBar(),
+      drawer: side_bar.sideBar(context),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

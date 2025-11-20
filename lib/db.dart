@@ -14,3 +14,23 @@ void updateDB() async {
     box.put(missKey, data);
   }
 }
+
+class CatalogEntry {
+  final String trackId;
+  final String songName;
+  final String author;
+
+  CatalogEntry(this.trackId, this.songName, this.author);
+}
+
+void getCatalog() {
+  var box = Hive.box('lyrics');
+  var tracksIds = box.keys;
+  List<Map> catalog = [];
+  for (var trackId in tracksIds) {
+    Map localData = box.get(trackId);
+    String author =
+        localData['lyric']['spoty_api_data']['artists']['0']['name'];
+    String songName = localData['lyric']['spoty_api_data']['name'];
+  }
+}
