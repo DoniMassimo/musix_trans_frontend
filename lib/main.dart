@@ -13,7 +13,7 @@ void main() async {
   await dotenv.load(fileName: 'secrets.env');
   await Hive.initFlutter();
   await Hive.openBox('lyrics');
-
+  db.updateDB();
   runApp(const MyApp());
 }
 
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: lyric.getLyiricsWidgets(),
+            children: [],
           ),
         ),
       ),

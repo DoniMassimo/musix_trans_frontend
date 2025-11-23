@@ -4,10 +4,14 @@ import 'dart:convert';
 
 final String baseUri = "127.0.0.1:5000";
 
+/// Thorw [http.get] Exception
 Future<List<String>> getTracksIds() async {
   var url = Uri.http(baseUri, '/get_tracks_ids');
-  var a = {'x-api-key': dotenv.env['API_KEY'] ?? ''};
-  http.Response res = await http.get(url, headers: a);
+  var header = {'x-api-key': dotenv.env['API_KEY'] ?? ''};
+  if (header['x-api-key'] == '') {
+    throw Exception("missing x-api-key");
+  }
+  http.Response res = await http.get(url, headers: header);
   var rawData = jsonDecode(res.body);
   return List<String>.from(rawData);
 }
