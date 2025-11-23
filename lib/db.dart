@@ -1,12 +1,12 @@
 import 'api.dart' as api;
 import 'dart:convert';
 import 'dart:io';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Throws [Uri.https] exceptions
-void updateDB() async {
+Future<void> updateDB() async {
   var box = Hive.box('lyrics');
   var a = box.keys;
   List<String> localKeys = a.map((key) => key.toString()).toList();
