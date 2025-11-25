@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musix_trans/db.dart';
 
 Drawer sideBar(BuildContext context) {
   return Drawer(
@@ -18,7 +19,9 @@ Drawer sideBar(BuildContext context) {
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Catalog()),
+              MaterialPageRoute(
+                builder: (context) => Catalog(catalog: getCatalog()),
+              ),
             );
           },
         ),
@@ -28,23 +31,26 @@ Drawer sideBar(BuildContext context) {
   );
 }
 
-class Catalog extends StatefulWidget {
-  const Catalog({super.key});
+class Catalog extends StatelessWidget {
+  final List<CatalogEntry> catalog;
 
-  @override
-  State<Catalog> createState() => _CatalogState();
-}
+  const Catalog({super.key, required this.catalog});
 
-class _CatalogState extends State<Catalog> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Prova"),
-      ),
-      drawer: sideBar(context),
-      body: Center(),
+    return ListView.builder(
+      itemCount: catalog.length,
+      itemBuilder: (context, index) {
+        ExpansionTile(
+          title: Text("Clicca qui"),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text("Contenuto espanso"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -29,16 +29,19 @@ class CatalogEntry {
   CatalogEntry(this.trackId, this.songName, this.author);
 }
 
-void getCatalog() {
+List<CatalogEntry> getCatalog() {
   var box = Hive.box('lyrics');
   var tracksIds = box.keys;
-  List<Map> catalog = [];
+  List<CatalogEntry> catalog = [];
   for (var trackId in tracksIds) {
     Map localData = box.get(trackId);
     String author =
-        localData['lyric']['spoty_api_data']['artists']['0']['name'];
-    String songName = localData['lyric']['spoty_api_data']['name'];
+        localData['lyric']?['spoty_api_data']?['artists']?[0]?['name'] ?? '';
+    String songName = localData['lyric']?['spoty_api_data']?['name'] ?? '';
+    var enrty = CatalogEntry(trackId, author, songName);
+    catalog.add(enrty);
   }
+  return catalog;
 }
 
 class HiveExporter {

@@ -14,8 +14,7 @@ void main() async {
   await dotenv.load(fileName: 'secrets.env');
   Hive.init((await getApplicationDocumentsDirectory()).toString());
   await Hive.openBox('lyrics');
-  db.updateDB();
-  // db.getCatalog();
+  db.getCatalog();
   runApp(const MyApp());
 }
 
