@@ -44,23 +44,25 @@ List<CatalogEntry> getCatalog() {
   return catalog;
 }
 
-class HiveExporter {
-  /// Esporta un solo box con nome [boxName]
-  static Future<File> exportBox(String boxName) async {
-    final box = Hive.box(boxName);
+class Line {
+  final String line;
+  final String trans;
+  final String comment;
 
-    final data = {"box": boxName, "values": box.toMap()};
+  Line(this.line, this.trans, this.comment);
 
-    final jsonStr = const JsonEncoder.withIndent('  ').convert(data);
-    final file = await _writeToFile(jsonStr, 'hive_export_$boxName.json');
-    return file;
+  static Line buildLine(Map elem) {
+    return Line(elem['words'], elem['trans'], elem['comment']);
   }
+}
 
-  /// Scrive su file nella cartella documenti dell’app
-  static Future<File> _writeToFile(String json, String filename) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$filename');
-    await file.writeAsString(json, flush: true);
-    return file;
+List<Line> getSongTrans(String trackId) {
+  var box = Hive.box('lyrics');
+  var tracksIds = box.keys;
+  if (!tracksIds.contains(trackId)) {
+    throw Exception("box does not contains trackId $trackId");
   }
+  List trackData = box.get(trackId)?['lyric']?['lines'];
+  List<Line> lines = trackData.map((elem) => Line.buildLine(elem)).toList();
+  return lines;
 }
