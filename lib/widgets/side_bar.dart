@@ -148,6 +148,7 @@ class _LyricPageState extends State<LyricPage> {
           children: [
             for (int i = 0; i < expanded.length; i++)
               ExpansionPanel(
+                canTapOnHeader: true,
                 headerBuilder: (_, __) => ListTile(title: Text(lines[i].line)),
                 body: Column(
                   children: [
