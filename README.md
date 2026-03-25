@@ -1,3 +1,8 @@
 # musix_trans
 
-## Struttura dati
+- lavorando a catalog repository
+
+
+# da fare
+
+- [ ] evitare prop drilling
